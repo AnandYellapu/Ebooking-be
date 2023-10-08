@@ -15,7 +15,7 @@ const connectDatabase = require('./config/database.js');
 const hotelRoutes = require('./routes/hotelRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const usersRoutes = require('./routes/usersRoutes');
-// const verifyToken = require('./middleware/auth.js');
+const verifyToken = require('./middleware/auth.js');
 
 var app = express();
 
@@ -38,6 +38,15 @@ app.use('/users', usersRouter);
 app.use('/api/hotels', hotelRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/users',usersRoutes);
+
+
+
+app.use('/api/auth/check-admin', verifyToken, (req, res) => {
+  // Assuming user roles are stored in the token
+  const isAdmin = req.user.role === 'admin';
+
+  res.json({ isAdmin });
+});
 
 
 // catch 404 and forward to error handler
